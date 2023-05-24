@@ -9,9 +9,10 @@ import static java.lang.System.getenv;
 import static java.lang.System.setOut;
 
 
-public class UserDao {
+public abstract class UserDao {
 
-    public Connection getConnection() throws ClassNotFoundException, SQLException {
+    public abstract Connection getConnection() throws ClassNotFoundException, SQLException; /* {
+
         Map<String, String> env = getenv();
         String dbHost = env.get("DB_HOST");
         String dbUser = env.get("DB_USER");
@@ -22,7 +23,7 @@ public class UserDao {
                 dbHost, dbUser, dbPassword
         );
         return conn;
-    }
+   }*/
     public void add(User user) throws ClassNotFoundException, SQLException {
         Connection conn = getConnection();
 
@@ -60,12 +61,12 @@ public class UserDao {
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao();
+        UserDao userDao = new NUserDao();
         User user = new User();
         user.setId("2");
         user.setName("huisu");
         user.setPassword("2459810");
-        User selectuser = userDao.get("1");
+        User selectuser = userDao.get("2");
         System.out.println(selectuser.getId());;
         System.out.println(selectuser.getName());
         System.out.println(selectuser.getPassword());
