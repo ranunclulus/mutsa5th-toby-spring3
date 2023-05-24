@@ -10,8 +10,8 @@ import static java.lang.System.getenv;
 public class UserDao {
     ConnectionMaker connectionMaker;
 
-    public UserDao() {
-        this.connectionMaker = new DConnectionMaker();
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
@@ -51,7 +51,7 @@ public class UserDao {
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao();
+        UserDao userDao = new UserDao(new DConnectionMaker());
         User user = new User();
         user.setId("2");
         user.setName("huisu");
