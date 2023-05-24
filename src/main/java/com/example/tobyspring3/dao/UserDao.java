@@ -3,29 +3,19 @@ package com.example.tobyspring3.dao;
 import com.example.tobyspring3.domain.User;
 
 import java.sql.*;
-import java.util.Map;
 
 import static java.lang.System.getenv;
-import static java.lang.System.setOut;
 
 
-public abstract class UserDao {
+public class UserDao {
+    ConnectionMaker connectionMaker;
 
-    public abstract Connection getConnection() throws ClassNotFoundException, SQLException; /* {
+    public UserDao() {
+        this.connectionMaker = new DConnectionMaker();
+    }
 
-        Map<String, String> env = getenv();
-        String dbHost = env.get("DB_HOST");
-        String dbUser = env.get("DB_USER");
-        String dbPassword = env.get("DB_PASSWORD");
-
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(
-                dbHost, dbUser, dbPassword
-        );
-        return conn;
-   }*/
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection conn = getConnection();
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("insert into User(id, name, password) values(?, ?, ?)");
         pstmt.setString(1, user.getId());
@@ -39,7 +29,7 @@ public abstract class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Connection conn = getConnection();
+        Connection conn = connectionMaker.makeConnection();
 
         PreparedStatement pstmt = conn.prepareStatement("select id, name, password from User where id = ?");
         pstmt.setString(1, id);
@@ -61,7 +51,7 @@ public abstract class UserDao {
 
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new NUserDao();
+        UserDao userDao = new UserDao();
         User user = new User();
         user.setId("2");
         user.setName("huisu");
